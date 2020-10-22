@@ -3,18 +3,26 @@ package com.flow.repository;
 import java.sql.Timestamp;
 
 public class Vocation  extends Form {
+
+    private String stime;
+
     private Timestamp starttime;
     private int lasttime;
     private String descript;
 
     @Override
     public String toString() {
-        return "Vocation{" + " starttime=" + starttime +
+        return "Vocation{" +
+                "stime='" + stime + '\'' +
+                ", starttime=" + starttime +
                 ", lasttime=" + lasttime +
                 ", descript='" + descript + '\'' +
                 '}';
     }
 
+    public void setStarttime(String s){
+        this.starttime = Timestamp.valueOf(s);
+    }
 
     public void setStarttime(Timestamp starttime) {
         this.starttime = starttime;
@@ -39,4 +47,14 @@ public class Vocation  extends Form {
     public String getDescript() {
         return descript;
     }
+
+    public String getStime() {
+        return stime;
+    }
+
+    public void setStime(String stime) {
+        this.stime = stime;
+    }
+
+
 }

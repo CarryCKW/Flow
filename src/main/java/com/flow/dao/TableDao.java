@@ -23,6 +23,7 @@ public interface TableDao {
      * @param form the Class Object which extends from Form
      * @param clazz the T.class
      * @param <T> the type of T must extends from Form
+     * @param objects the added object param
      */
-    <T extends Form> void insertTable(T form, Class<? extends Form> clazz);
+    <T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects);
 }

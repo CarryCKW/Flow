@@ -66,4 +66,8 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.min.js</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.gif</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author 蔡小蔚
+ */
 @Service
 public class FormInfoImpl implements FormInfo {
 
@@ -19,4 +22,11 @@ public class FormInfoImpl implements FormInfo {
         List<Vocation> list = (List<Vocation>) tableDao.searchRoundForm(nick, Vocation.class, null);
         return list;
     }
+
+    @Override
+    public void insertVocation(Vocation vocation) {
+        tableDao.insertTable(vocation, Vocation.class, vocation.getStarttime(), vocation.getLasttime(), vocation.getDescript());
+    }
+
+
 }

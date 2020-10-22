@@ -50,7 +50,7 @@ public class LoginCtrl {
             if(userInfo.checkPassword(nick,userpassword)){
                 response.addCookie(new Cookie("nick",nick));
                 System.out.println("pass login");
-                response.sendRedirect(request.getContextPath() + "/index");  // wrong
+                response.sendRedirect(request.getContextPath() + "/index");
             }else {
                 response.setContentType("text/html;charset=utf-8");
                 PrintWriter out = response.getWriter();

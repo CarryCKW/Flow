@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/xadmin.css">
-    <script src="../js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/xadmin.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -31,6 +31,10 @@
 </head>
 
 <body>
+
+    <%
+        String baseurl = null;
+    %>
 <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">首页</a>
@@ -53,7 +57,17 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','${pageContext.request.contextPath}/html/order-add.html')"><i class="layui-icon"></i>添加</button>
+<%--        <button class="layui-btn" onclick="x_admin_show('添加用户','${pageContext.request.contextPath}/html/order-add.html')"><i class="layui-icon"></i>添加</button>--%>
+<%--        <button class="layui-btn" onclick="x_admin_show()">--%>
+<%--            <i class="layui-icon"></i>--%>
+<%--            <a _href="${pageContext.request.contextPath}/form/displayVocation">添加</a>--%>
+<%--        </button>--%>
+        <nav>
+            <i class="layui-icon"></i>
+            <a href="${pageContext.request.contextPath}/form/displayVocation">添加</a>
+        </nav>
+
+
         <span class="x-right" style="line-height:40px">共有数据：${vocationlist.size() + 1}条</span>
     </xblock>
     <table class="layui-table">

@@ -72,17 +72,36 @@ public class TableDaoJdbcImpl implements TableDao {
     }
 
     @Override
-    public <T extends Form> void insertTable(T form, Class<? extends Form> clazz) {
+    public < T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects) {
         if (clazz.equals(Form.class)){
-            String sql = "insert into form(uuid, nick, formtype, formstatus, createdate) VALUES (?, ?, ?, ?, ?);";
-            PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
-                    new int[]{Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.BIGINT, Types.TIMESTAMP});
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            int count = jdbcTemplate.update(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{
-                    form.getUuid(), form.getNick(), form.getFormtype(), form.getFormstatus(),form.getCreatedate()}), keyHolder);
-            if (count!=1){
+            String sql = "insert into form(uuid, nick, formtype, formstatus, createdate) VALUES (?, ?, ?, ?, ?)";
+//            PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
+//                    new int[]{Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP});
+//            KeyHolder keyHolder = new GeneratedKeyHolder();
+//            int count = jdbcTemplate.update(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{
+//                    form.getUuid(), form.getNick(), form.getFormtype(), form.getFormstatus(),form.getCreatedate()}), keyHolder);
+            Object[] objects1 = new Object[]{form.getUuid(), form.getNick(), form.getFormtype(), form.getFormstatus(),form.getCreatedate()};
+            int[] args1 = new int[]{Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};
+            int count1 = jdbcTemplate.update(sql, objects1, args1);
+            if (count1!=1){
                 throw new DataOpException("cant insert into table form.");
             }
+            return;
+        } else if (clazz.equals(Vocation.class)){
+            insertTable(form, Form.class);
+            String sql = "insert into vocation(uuid, starttime, lasttime, descript) VALUES (?, ?, ?, ?)";
+//            PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
+//                    new int[]{Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER,Types.VARCHAR});
+//            KeyHolder keyHolder = new GeneratedKeyHolder();
+//            int count = jdbcTemplate.update(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{
+//                    form.getUuid(),  objects[0], objects[1], objects[2]}), keyHolder);
+            Object[] objects2 = new Object[]{form.getUuid(),  objects[0], objects[1], objects[2]};
+            int[] args2 = new int[]{Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER,Types.VARCHAR};
+            int count2 = jdbcTemplate.update(sql, objects2, args2);
+            if (count2!=1){
+                throw new DataOpException("cant insert into table form.");
+            }
+            return;
         } else {
             throw new DataOpException("not implement this class.");
         }
