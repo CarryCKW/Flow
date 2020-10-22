@@ -13,8 +13,8 @@ public class Form {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         Form form = (Form) o;
         return formtype == form.formtype &&
                 formstatus == form.formstatus &&

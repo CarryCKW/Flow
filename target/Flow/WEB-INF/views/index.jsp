@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.net.URLDecoder" %><%--
   Created by IntelliJ IDEA.
   User: 蔡小蔚
   Date: 2020/10/19
@@ -36,7 +36,29 @@
 
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:">admin</a>
+            <%
+                Cookie[] cookies = request.getCookies();
+                String nick = null;
+                boolean hasUser = false;
+                if (cookies!=null){
+                    for (Cookie cookie:cookies){
+                        if (cookie.getName().equalsIgnoreCase("nick")){
+                            nick = URLDecoder.decode(cookie.getValue(),"utf-8");
+                            if(!nick.equals(null)){
+                                hasUser=true;
+                            }
+                        }
+                    }
+                }
+            %>
+
+            <%
+                if (hasUser){
+            %>
+            <a href="javascript:"><%= nick%></a>
+            <%
+            }else{}
+            %>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onClick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
                 <dd><a href="${pageContext.request.contextPath}/login.html">退出</a></dd>

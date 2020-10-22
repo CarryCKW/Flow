@@ -47,22 +47,22 @@
                     <option value="">请假信息状态</option>
                     <option value="0">待通过</option>
                     <option value="1">已通过</option>
+                    <option value="2">未通过</option>
                 </select>
             </div>
         </form>
     </div>
     <xblock>
         <button class="layui-btn" onclick="x_admin_show('添加用户','${pageContext.request.contextPath}/html/order-add.html')"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+        <span class="x-right" style="line-height:40px">共有数据：${vocationlist.size() + 1}条</span>
     </xblock>
     <table class="layui-table">
         <thead>
-        <tr>
-            <th>
-                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
+<%--        <tr>--%>
+<%--            <th>--%>
+<%--                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>--%>
+<%--            </th>--%>
             <th>申请人姓名</th>
-            <th>表单ID</th>
             <th>申请状态</th>
             <th>申请创建时间</th>
             <th>开始时间</th>
@@ -72,22 +72,37 @@
         </thead>
         <tbody>
         <tr>
-            <td>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>菜菜子</td>
-            <td>9194</td>
-            <td>待审批</td>
+            <td>stu</td>
+            <td>待通过</td>
             <td>2020-09-10 18:23</td>
             <td>2020-10-01 00:00</td>
             <td>8天</td>
-            <td>没事儿</td>
-            <td class="td-manage">
-                <a title="查看"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:">
-                    <i class="layui-icon">&#xe63c;</i>
-                </a>
-            </td>
+            <td>nothing to do</td>
+<%--            <td class="td-manage">--%>
+<%--                <a title="查看"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:">--%>
+<%--                    <i class="layui-icon">&#xe63c;</i>--%>
+<%--                </a>--%>
+<%--            </td>--%>
         </tr>
+        <c:if test="${not empty vocationlist}">
+            <c:forEach var="vocation" items="${vocationlist}" varStatus="c">
+                <tr>
+                    <td>${vocation.nick}</td>
+                    <c:if test="${vocation.formstatus == 0}"><td>待通过</td></c:if>
+                    <c:if test="${vocation.formstatus == 1}"><td>已通过</td></c:if>
+                    <c:if test="${vocation.formstatus == 2}"><td>未通过</td></c:if>
+                    <td>${vocation.createdate}</td>
+                    <td>${vocation.starttime}</td>
+                    <td>${vocation.lasttime}天</td>
+                    <td>${vocation.descript}</td>
+<%--                    <td class="td-manage">--%>
+<%--                        <a title="查看"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:">--%>
+<%--                            <i class="layui-icon">&#xe63c;</i>--%>
+<%--                        </a>--%>
+<%--                    </td>--%>
+                </tr>
+            </c:forEach>
+        </c:if>
         </tbody>
     </table>
     <div class="page">

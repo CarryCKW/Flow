@@ -1,16 +1,25 @@
 package com.flow.dao;
 
 import com.flow.combination.VocationTable;
+import com.flow.exdException.DataOpException;
 import com.flow.repository.Form;
 import com.flow.repository.Vocation;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
+/**
+ * @author 蔡小蔚
+ */
 public class TableDaoJdbcImpl implements TableDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -64,6 +73,18 @@ public class TableDaoJdbcImpl implements TableDao {
 
     @Override
     public <T extends Form> void insertTable(T form, Class<? extends Form> clazz) {
-
+        if (clazz.equals(Form.class)){
+            String sql = "insert into form(uuid, nick, formtype, formstatus, createdate) VALUES (?, ?, ?, ?, ?);";
+            PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
+                    new int[]{Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.BIGINT, Types.TIMESTAMP});
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            int count = jdbcTemplate.update(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{
+                    form.getUuid(), form.getNick(), form.getFormtype(), form.getFormstatus(),form.getCreatedate()}), keyHolder);
+            if (count!=1){
+                throw new DataOpException("cant insert into table form.");
+            }
+        } else {
+            throw new DataOpException("not implement this class.");
+        }
     }
 }

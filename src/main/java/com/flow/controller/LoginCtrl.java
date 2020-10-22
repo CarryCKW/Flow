@@ -1,6 +1,8 @@
 package com.flow.controller;
 
 import com.flow.repository.User;
+import com.flow.repository.Vocation;
+import com.flow.service.FormInfo;
 import com.flow.service.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * @author 蔡小蔚
@@ -24,6 +27,9 @@ public class LoginCtrl {
 
     @Autowired
     private UserInfo userInfo;
+
+    @Autowired
+    private FormInfo formInfo;
 
     @RequestMapping("/")
     public ModelAndView login(){
@@ -65,7 +71,7 @@ public class LoginCtrl {
     }
 
     @RequestMapping("/vacationinfo")
-    public  ModelAndView toVacationView(HttpServletRequest request, HttpServletResponse response){
+    public  ModelAndView toVacationView(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Cookie[] cookies = request.getCookies();
         ModelAndView view = null;
         System.out.println("cookies num" + cookies.length);
@@ -79,6 +85,8 @@ public class LoginCtrl {
                     //加入请假消息列表
                     view = new ModelAndView("order-list-stu");
                     //view.add(...)
+                    List<Vocation> vocationList = (List<Vocation>) formInfo.getVocationListByNick(usernick);
+                    view.addObject("vocationlist", vocationList);
                     return view;
                 } else if (user.getUserstatus() == 1) {
                     System.out.println("admin in");
