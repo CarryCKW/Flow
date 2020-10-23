@@ -9,6 +9,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author 蔡小蔚
+ */
 public class UserDaoJdbcImpl implements UserDao{
 
     private JdbcTemplate jdbcTemplate;

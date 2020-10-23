@@ -1,5 +1,8 @@
 package com.flow.combination;
 
+/**
+ * @author 蔡小蔚
+ */
 public class String2Time {
     private String starttime;
 

@@ -3,6 +3,9 @@ package com.flow.repository;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+/**
+ * @author 蔡小蔚
+ */
 public class Form {
     private String uuid;
     private String nick;

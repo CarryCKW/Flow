@@ -1,7 +1,10 @@
-package com.flow.exdException;
+package com.flow.exdexception;
 
 import org.springframework.dao.DataAccessException;
 
+/**
+ * @author 蔡小蔚
+ */
 public class DataOpException extends DataAccessException {
     private String s;
 

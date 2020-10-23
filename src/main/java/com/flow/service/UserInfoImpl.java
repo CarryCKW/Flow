@@ -5,6 +5,9 @@ import com.flow.repository.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author 蔡小蔚
+ */
 @Service
 public class UserInfoImpl implements UserInfo {
 

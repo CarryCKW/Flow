@@ -1,16 +1,11 @@
 package com.flow.dao;
 
-import com.flow.combination.VocationTable;
-import com.flow.exdException.DataOpException;
+import com.flow.exdexception.DataOpException;
 import com.flow.repository.Form;
 import com.flow.repository.Vocation;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
