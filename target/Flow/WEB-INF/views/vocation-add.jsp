@@ -32,47 +32,47 @@
 <body>
 <div class="x-body">
     <mvc:form modelAttribute="newVocation" action="${pageContext.request.contextPath}/form/addVocation" cssClass="layui-form" >
-        <div class="layui-form layui-form-item">
-            <label class="layui-form layui-form-label">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span><mvc:label path="nick">申请人姓名</mvc:label>
             </label>
-            <div class="layui-form layui-input-inline">
+            <div class="layui-input-inline">
 <%--                <input type="text" id="username" name="nickname" class="layui-input">--%>
                 <mvc:input path="nick"/>
             </div>
         </div>
-        <div class="layui-form layui-form-item">
-            <label class="layui-form layui-form-label">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span><mvc:label path="stime">开始时间</mvc:label>
             </label>
-            <div class="layui-form layui-input-inline">
+            <div class="layui-input-inline">
 <%--                <input type="date" id="starttime" name="starttime" class="layui-input">--%>
                 <mvc:input path="stime"/>
             </div>
-            <label class="layui-form layui-form-label">
+            <label class="layui-form-label">
                 <span class="x-red">yyyy-MM-dd HH:mm:ss</span>
             </label>
         </div>
-        <div class="layui-form layui-form-item">
-            <label class="layui-form layui-form-label">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span><mvc:label path="lasttime">持续时间</mvc:label>
             </label>
-            <div class="layui-form layui-input-inline">
+            <div class="layui-input-inline">
 <%--                <input type="text" id="lasttime" name="lasttime" class="layui-input">--%>
                 <mvc:input path="lasttime"/>
             </div>
         </div>
-        <div class="layui-form layui-form-item layui-form-text">
-            <label class="layui-form layui-form-label">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">
                 <mvc:label path="descript">描述</mvc:label>
             </label>
-            <div class="layui-form layui-input-block">
+            <div class="layui-input-block">
 <%--                <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>--%>
                 <mvc:input path="descript" />
             </div>
         </div>
-        <div class="layui-form layui-form-item">
-            <label class="layui-form layui-form-label">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
             </label>
 <%--            <button  class="layui-btn" lay-submit lay-filter="add" >--%>
 <%--                增加--%>
@@ -80,7 +80,6 @@
             <input type="submit" value="新增" id="sub"/>
         </div>
     </mvc:form>
-
 
 
 <%--    <form class="layui-form">--%>

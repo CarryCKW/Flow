@@ -1,0 +1,175 @@
+package com.flow.flowdefinition;
+
+
+import com.flow.exdException.DataOpException;
+import com.flow.exdException.InvalidGraphException;
+
+import java.io.*;
+import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @author 蔡小蔚
+ */
+public class FlowDefinition {
+    private static FileInputStream inputStream = null;
+    private static FileWriter fileWriter = null;
+    private static FileReader fileReader = null;
+    private static int N = 12;
+
+//    static {
+//        try {
+//            inputStream = new FileInputStream("VocationFlowGraphDefinition");
+//        }catch (FileNotFoundException e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    public enum CHOICE {
+        ///
+        Vocation, Reception
+    }
+
+    public static String getFlowDefinition(String sourcefilename, CHOICE choice) throws IOException {
+        StringBuilder result = new StringBuilder();
+        if (choice.equals(CHOICE.Vocation)) {
+            fileReader = new FileReader("VocationFlowGraphDefinition.txt");
+            BufferedReader br = new BufferedReader(fileReader);
+            String s = null;
+            while ((s = br.readLine())!=null) {
+                result.append(s);
+            }
+            br.close();
+            return result.toString();
+        }else {
+            throw new DataOpException("not implement");
+        }
+    }
+
+    /**
+     * this func to check input changed's valid, if valid then output to the target file and change the source
+     * flowDefinition file, otherwise throw exception
+     * @param targetfilename targetfile
+     * @param choice the enum value
+     * @param changed the input value
+     * @throws IOException exception
+     * @throws InvalidGraphException exception
+     */
+    public static void cout2File(String targetfilename, CHOICE choice, String changed) throws IOException, InvalidGraphException {
+        if (choice.equals(CHOICE.Vocation)) {
+            try {
+                fileWriter = new FileWriter(targetfilename);
+                String[][] edges = new String[N][2];
+                edges = checkGraphValid(changed);
+
+                FileWriter fileWriter2 = new FileWriter("VocationFlowGraphDefinition.txt");
+                fileWriter2.write(changed);
+                fileWriter2.flush();
+                fileWriter2.close();
+
+                for (int i=0;i<N;++i){
+                    if (!edges[0].equals("null")){
+                        for (int j=0;j<2;++j){
+                            fileWriter.write(edges[i][j].toString());
+                            fileWriter.write("\t");
+                        }
+                        fileWriter.write("\n");
+                        fileWriter.flush();
+                    } else {
+                        fileWriter.close();
+                        break;
+                    }
+                }
+            }catch (FileNotFoundException e){
+                e.printStackTrace();
+                throw new FileNotFoundException();
+            }catch (InvalidGraphException e){
+                throw new InvalidGraphException("wrong vocation flow graph definition");
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new IOException();
+            }
+        } else if (choice.equals(CHOICE.Reception)) {
+            throw new DataOpException("not implement");
+        } else {
+            throw new DataOpException("not implement");
+        }
+    }
+
+    /**
+     * return graph edges if input s is valid, otherwise throw
+     * @param s the input from jsp's editor
+     * @return edges
+     * InvalidGraphException exception
+     */
+    private static String[][] checkGraphValid(String s) throws InvalidGraphException {
+        try {
+            String[][] graph = new String[N][2];
+            int[][] g = new int[N][N];
+            boolean isvalid = false;
+            ArrayList<Node> nodes = new ArrayList<>();
+            Set<String> set = new HashSet<>();
+            String[] edges = s.split(":");
+            int idx = 0;
+            for (int j=0;j<edges.length;++j) {
+                String edge = edges[j];
+                String[] ns = edge.split("->");
+                for (int i=0;i<2;++i){
+                    ns[i] = ns[i].replaceAll("]","");
+                    ns[i] = ns[i].replaceAll("\\[", "");
+                    if (!set.contains(ns[i])){
+                        set.add(ns[i]);
+                        nodes.add(new Node(ns[i], idx));
+                        idx += 1;
+                    }
+                    graph[j][i] = ns[i];
+                }
+                int idx1 = 0;
+                for (int i=0;i<nodes.size();++i){
+                    if (nodes.get(i).name.equals(ns[0])){
+                        idx1 = nodes.get(i).index;
+                        break;
+                    }
+                }
+                int idx2 = 0;
+                for (int i=0;i<nodes.size();++i){
+                    if (nodes.get(i).name.equals(ns[1])){
+                        idx2 = nodes.get(i).index;
+                        break;
+                    }
+                }
+                g[idx1][idx2] = 1;
+            }
+            isvalid = isValid(g);
+            if (isvalid) {
+                return graph;
+            } else {
+                throw new InvalidGraphException("wrong");
+            }
+        }catch (InvalidGraphException e){
+            e.printStackTrace();
+            throw new InvalidGraphException("wrong vocation flow graph definition");
+        }
+    }
+
+    /**
+     * return true if g contains no circle, otherwise false
+     * @param g 2D graph
+     * @return true or false
+     */
+    private static boolean isValid(int[][] g){
+        return true;
+    }
+
+    private static class Node {
+        public String name;
+        public int index;
+
+        public Node(String name, int index) {
+            this.name = name;
+            this.index = index;
+        }
+    }
+}

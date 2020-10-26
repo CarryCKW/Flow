@@ -1,7 +1,8 @@
 package com.flow.dao;
 
-import com.flow.exdexception.DataOpException;
+import com.flow.exdException.DataOpException;
 import com.flow.repository.Form;
+import com.flow.repository.Receipt;
 import com.flow.repository.Vocation;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,7 +28,7 @@ public class TableDaoJdbcImpl implements TableDao {
 
 
     @Override
-    public List<? extends Form> searchRoundForm(final String nick, Class<? extends Form> clazz, final String uuid) throws Exception {
+    public List<? extends Form> searchRoundForm(final String nick, final Class<? extends Form> clazz, final String uuid) {
         if (clazz.equals(Form.class)) {
             String sql = "select * from form where nick = ?";
             List<Form> list = jdbcTemplate.query(sql, new Object[]{nick}, new RowMapper<Form>() {
@@ -61,13 +62,30 @@ public class TableDaoJdbcImpl implements TableDao {
                 }
             });
             return list;
+        } else if (clazz.equals(Receipt.class)){
+            String sql = "select * from form, receipt where nick = ? and form.uuid = receipt.uuid";
+            List<Receipt> list = jdbcTemplate.query(sql, new Object[]{nick}, new RowMapper<Receipt>() {
+                @Override
+                public Receipt mapRow(ResultSet resultSet, int i) throws SQLException {
+                    Receipt receipt = new Receipt();
+                    receipt.setAmount(resultSet.getFloat("amount"));
+                    receipt.setDescript(resultSet.getString("descript"));
+                    receipt.setTime(resultSet.getTimestamp("time"));
+                    receipt.setCreatedate(resultSet.getTimestamp("createdate"));
+                    receipt.setFormstatus(resultSet.getInt("formtype"));
+                    receipt.setNick(nick);
+                    receipt.setUuid(resultSet.getString("uuid"));
+                    return receipt;
+                }
+            });
+            return list;
         } else {
             return null;
         }
     }
 
     @Override
-    public < T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects) {
+    public < T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException{
         if (clazz.equals(Form.class)){
             String sql = "insert into form(uuid, nick, formtype, formstatus, createdate) VALUES (?, ?, ?, ?, ?)";
 //            PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
@@ -78,7 +96,7 @@ public class TableDaoJdbcImpl implements TableDao {
             Object[] objects1 = new Object[]{form.getUuid(), form.getNick(), form.getFormtype(), form.getFormstatus(),form.getCreatedate()};
             int[] args1 = new int[]{Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};
             int count1 = jdbcTemplate.update(sql, objects1, args1);
-            if (count1!=1){
+            if (count1!=1) {
                 throw new DataOpException("cant insert into table form.");
             }
             return;
@@ -93,8 +111,18 @@ public class TableDaoJdbcImpl implements TableDao {
             Object[] objects2 = new Object[]{form.getUuid(),  objects[0], objects[1], objects[2]};
             int[] args2 = new int[]{Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER,Types.VARCHAR};
             int count2 = jdbcTemplate.update(sql, objects2, args2);
-            if (count2!=1){
+            if (count2!=1) {
                 throw new DataOpException("cant insert into table form.");
+            }
+            return;
+        } else if (clazz.equals(Receipt.class)){
+            insertTable(form, Form.class);
+            String sql = "insert into receipt(uuid, time, amount, descript) VALUES (?, ?, ?, ?)";
+            Object[] objects3 = new Object[]{form.getUuid(), objects[0], objects[1], objects[2]};
+            int[] args3 = new int[]{Types.VARCHAR, Types.TIMESTAMP, Types.FLOAT, Types.VARCHAR};
+            int count3 = jdbcTemplate.update(sql, objects3, args3);
+            if (count3!=1) {
+                throw  new DataOpException("can't insert into table receipt");
             }
             return;
         } else {

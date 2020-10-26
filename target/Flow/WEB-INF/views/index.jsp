@@ -73,6 +73,9 @@
 <div class="left-nav">
     <div id="side-nav">
         <ul id="nav">
+            <%
+                if (!nick.equals("root")){
+            %>
             <li>
                 <a href="javascript:">
                     <i class="iconfont">&#xe6b2;</i>
@@ -81,7 +84,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-<%--                        <a _href="${pageContext.request.contextPath}/html/order-list.html">--%>
+                        <%--                        <a _href="${pageContext.request.contextPath}/html/order-list.html">--%>
                         <a _href="${pageContext.request.contextPath}/vacationinfo">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>请假信息列表</cite>
@@ -99,6 +102,31 @@
                     <li><a _href="${pageContext.request.contextPath}/html/welcome.html"><i class="iconfont">&#xe6a7;</i><cite>控制台</cite></a></li >
                 </ul>
             </li>
+            <%
+                }
+            %>
+            <%
+                if (nick.equals("root")){
+            %>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6b2;</i>
+                    <cite>流程管理(root)</cite>
+                    <i class="iconfont nav_right">&#xe6a7;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="${pageContext.request.contextPath}/flowdefine/showflowdefinition">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>请假流程</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <%
+                }
+            %>
+
 
         </ul>
     </div>

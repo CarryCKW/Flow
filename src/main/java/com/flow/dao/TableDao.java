@@ -1,5 +1,6 @@
 package com.flow.dao;
 
+import com.flow.exdException.DataOpException;
 import com.flow.repository.Form;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface TableDao {
      * @return list of the Class extends from Form
      * @throws Exception may be not implement
      */
-    List<? extends Form> searchRoundForm(String nick , Class<? extends Form> clazz, String uuid) throws Exception;
+    List<? extends Form> searchRoundForm(String nick , Class<? extends Form> clazz, String uuid);
 
     /**
      * to update data repository table form , vocation or ...
@@ -25,5 +26,5 @@ public interface TableDao {
      * @param <T> the type of T must extends from Form
      * @param objects the added object param
      */
-    <T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects);
+    <T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException;
 }
