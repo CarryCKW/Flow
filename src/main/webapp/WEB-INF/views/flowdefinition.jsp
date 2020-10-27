@@ -43,7 +43,7 @@
         <h2 class="layui-colla-title">原有请假流程</h2>
 <%--        <div class="layui-colla-content layui-show">[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]</div>--%>
         <div class="layui-colla-content layui-show">
-            ${flowdefinition.beforeChangeDescript}
+            ${sourceResult}
         </div>
     </div>
     <div class="layui-colla-item">

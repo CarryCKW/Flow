@@ -32,16 +32,35 @@ public class FlowDefinition {
         Vocation, Reception
     }
 
+    /**
+     * look this https://www.cnblogs.com/blogtech/p/11151780.html
+     * @param sourcefilename can be null
+     * @param choice CHOICE Type
+     * @return the original source graph
+     * @throws IOException FileNotFoundException
+     */
     public static String getFlowDefinition(String sourcefilename, CHOICE choice) throws IOException {
         StringBuilder result = new StringBuilder();
+        BufferedReader br = null;
         if (choice.equals(CHOICE.Vocation)) {
-            fileReader = new FileReader("VocationFlowGraphDefinition.txt");
-            BufferedReader br = new BufferedReader(fileReader);
-            String s = null;
-            while ((s = br.readLine())!=null) {
-                result.append(s);
+            try{
+                String basePath = "WEB-INF/classes/";
+                sourcefilename = "VocationFlowGraphDefinition.txt";
+//                String path = FlowDefinition.class.getResource(sourcefilename).getPath();
+//            System.out.println("path: " + path);
+//            fileReader = new FileReader("VocationFlowGraphDefinition.txt");
+                fileReader = new FileReader(basePath + sourcefilename);
+                br = new BufferedReader(fileReader);
+                String s = null;
+                while ((s = br.readLine())!=null) {
+                    result.append(s);
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            } finally {
+                assert br != null;
+                br.close();
             }
-            br.close();
             return result.toString();
         }else {
             throw new DataOpException("not implement");
@@ -60,6 +79,7 @@ public class FlowDefinition {
     public static void cout2File(String targetfilename, CHOICE choice, String changed) throws IOException, InvalidGraphException {
         if (choice.equals(CHOICE.Vocation)) {
             try {
+                targetfilename = "vocationflow.txt";
                 fileWriter = new FileWriter(targetfilename);
                 String[][] edges = new String[N][2];
                 edges = checkGraphValid(changed);
@@ -70,7 +90,7 @@ public class FlowDefinition {
                 fileWriter2.close();
 
                 for (int i=0;i<N;++i){
-                    if (!edges[0].equals("null")){
+                    if (edges[0] != null){
                         for (int j=0;j<2;++j){
                             fileWriter.write(edges[i][j].toString());
                             fileWriter.write("\t");

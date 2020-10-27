@@ -20,11 +20,19 @@ public class FlowDefinitionCtrl {
     @Autowired
     private FlowDefinition flowDefinition;
 
-    @RequestMapping("/showflowdefinition")
+    @RequestMapping("/vocationflow")
     public ModelAndView vocationflowView() throws IOException {
         ModelAndView view = new ModelAndView("flowdefinition");
-        FlowDefInfo flowDefInfo = new FlowDefInfo();
-        view.addObject("flowdefinition", flowDefInfo);
+        String sourceResult = null;
+        try{
+            FlowDefInfo flowDefInfo = new FlowDefInfo();
+            sourceResult = flowDefInfo.getBeforeChangeDescript();
+            view.addObject("flowdefinition", flowDefInfo);
+            view.addObject("sourceResult", sourceResult);
+            System.out.println("sourceResult:" + sourceResult);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         return view;
     }
 }
