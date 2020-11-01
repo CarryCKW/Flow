@@ -44,12 +44,13 @@ public class FlowDefinition {
         BufferedReader br = null;
         if (choice.equals(CHOICE.Vocation)) {
             try{
+                String ideaPath = "src/main/resources/";
                 String basePath = "WEB-INF/classes/";
                 sourcefilename = "VocationFlowGraphDefinition.txt";
 //                String path = FlowDefinition.class.getResource(sourcefilename).getPath();
 //            System.out.println("path: " + path);
 //            fileReader = new FileReader("VocationFlowGraphDefinition.txt");
-                fileReader = new FileReader(basePath + sourcefilename);
+                fileReader = new FileReader(ideaPath + sourcefilename);
                 br = new BufferedReader(fileReader);
                 String s = null;
                 while ((s = br.readLine())!=null) {
@@ -58,9 +59,11 @@ public class FlowDefinition {
             }catch (NullPointerException e){
                 e.printStackTrace();
             } finally {
+                System.out.println("flowdefinition:" + result.toString());
                 assert br != null;
                 br.close();
             }
+
             return result.toString();
         }else {
             throw new DataOpException("not implement");
