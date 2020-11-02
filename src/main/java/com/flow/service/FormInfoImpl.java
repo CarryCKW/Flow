@@ -8,9 +8,9 @@ import com.flow.repository.Vocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author 蔡小蔚
@@ -41,8 +41,8 @@ public class FormInfoImpl implements FormInfo {
             try {
                 FlowDefinition.Node currentNode = FlowDefinition.getCurrentNode(adminName);
                 assert currentNode.name.equals(adminName);
-                boolean canProcess = true;
-                int shiftLen = currentNode.index;
+                AtomicBoolean canProcess = new AtomicBoolean(true);
+                int shiftLen = currentNode.index - 1;
                 int xorNum = 1<<shiftLen;
 
                 List<Form> forms = (List<Form>) tableDao.getAllTables(Form.class);
@@ -56,9 +56,21 @@ public class FormInfoImpl implements FormInfo {
                      *          2       Receipt
                      *          ...     ...
                      */
-                    if (form1.getFormtype() == 1 && form1.getFormstatus()!=-1) {
-                        form1.setFormstatus(form1.getFormstatus()^xorNum);
+                    if (form1.getFormtype() == 1 && form1.getFormstatus()!=-1 ) {
+                        nodes.forEach(node -> {
+                            int idx = node.index;
+                            int xor = 1<<(idx - 1);
+                            int status = form1.getFormstatus();
+                            int should = status|xor;
+                            if (should!=status) {
+                                canProcess.set(false);
+                            }
+                        });
+                        if (canProcess.get()) {
+                            form1.setFormstatus(form1.getFormstatus()^xorNum);
+                        }
                     }
+                    canProcess.set(true);
                 });
                 tableDao.updateTables(forms, Form.class);
             }

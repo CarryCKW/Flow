@@ -18,7 +18,7 @@ public class GraphValidTest {
         String s = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
 //        FlowDefinition.cout2File(filename, FlowDefinition.CHOICE.Vocation, s);
 
-        ArrayList<FlowDefinition.Node> prenodes = FlowDefinition.getPreNodes("admin1");
+        ArrayList<FlowDefinition.Node> prenodes = FlowDefinition.getPreNodes("admin3");
         prenodes.forEach(node -> {
             System.out.println("node.name:" + node.name + "node.index:" + node.index);
         });

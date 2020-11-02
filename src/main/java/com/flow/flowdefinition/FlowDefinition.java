@@ -160,7 +160,7 @@ public class FlowDefinition {
     public static Node getCurrentNode(String currentName) throws DataOpException {
         assert currentName!=null;
         /**
-         * we should change the way of getting the string changed from file named "vocationflow.txt"
+         * we should change the way of getting the string changed from file named "VocatinFlow.....txt"
          */
         String changed = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
         ArrayList<Node> nodes = getNodes(changed);
@@ -170,6 +170,9 @@ public class FlowDefinition {
                 need.name = node.name;
                 need.index = node.index;
             }
+        });
+        nodes.forEach(node -> {
+            System.out.println(node.toString());
         });
         if (!need.name.equals(currentName)) {
             throw new DataOpException("can't find current node by currentName...");
