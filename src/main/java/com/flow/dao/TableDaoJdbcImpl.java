@@ -129,4 +129,15 @@ public class TableDaoJdbcImpl implements TableDao {
             throw new DataOpException("not implement this class.");
         }
     }
+
+    @Override
+    public <T extends Form> void updateTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException {
+        String sql = "update form set formstatus = ? where uuid = ?";
+        int count = jdbcTemplate.update(sql, new Object[]{form.getFormstatus(), form.getUuid()}, new int[]{Types.INTEGER, Types.VARCHAR});
+        if (count != 1){
+            throw new DataOpException("can't update formstatus in method {# com.flow.dao.TableDaoJdbcImpl.updataTable}");
+        }
+
+
+    }
 }

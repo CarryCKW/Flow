@@ -27,4 +27,7 @@ public interface TableDao {
      * @param objects the added object param
      */
     <T extends Form> void insertTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException;
+
+
+    <T extends Form> void updateTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException;
 }

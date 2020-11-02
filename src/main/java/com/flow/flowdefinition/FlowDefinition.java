@@ -7,6 +7,7 @@ import com.flow.exdException.InvalidGraphException;
 import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ public class FlowDefinition {
     private static FileReader fileReader = null;
     private static int N = 12;
 
+
+
 //    static {
 //        try {
 //            inputStream = new FileInputStream("VocationFlowGraphDefinition");
@@ -27,7 +30,7 @@ public class FlowDefinition {
 //        }
 //    }
 
-    public enum CHOICE {
+    private enum CHOICE {
         ///
         Vocation, Reception
     }
@@ -122,6 +125,35 @@ public class FlowDefinition {
     }
 
     /**
+     * get the pre admin or stu role and its index by the current admin's name
+     * @param changed  the input graph
+     * @return list of pre {@Link FlowDefinition.Node} Node
+     */
+    public static ArrayList<Node> getPreNodes(String changed, String currentName) {
+        ArrayList<Node> nodes = getNodes(changed);
+        final String[][] graph = checkGraphValid(changed);
+//        Arrays.asList(graph).forEach(edge -> {
+//            Arrays.asList(edge).forEach(System.out::println);
+//        });
+        int length = graph.length;
+        final ArrayList<Node> res = new ArrayList<>();
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < 2;++j) {
+                if (j==1 && graph[i][j]!=null && currentName.equals(graph[i][j])) {
+                    final int finalI = i;
+                    nodes.forEach(node -> {
+                        if (node.name.equals(graph[finalI][0])) {
+                            res.add(node);
+                        }
+                    });
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * return graph edges if input s is valid, otherwise throw
      * @param s the input from jsp's editor
      * @return edges
@@ -171,11 +203,67 @@ public class FlowDefinition {
             } else {
                 throw new InvalidGraphException("wrong");
             }
-        }catch (InvalidGraphException e){
+        }
+        catch (InvalidGraphException e){
             e.printStackTrace();
             throw new InvalidGraphException("wrong vocation flow graph definition");
         }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("NullPointerException throws there...");
+            throw new NullPointerException("here");
+        }
     }
+
+    private static ArrayList<Node> getNodes(String s) {
+        try {
+            String[][] graph = new String[N][2];
+            int[][] g = new int[N][N];
+            ArrayList<Node> nodes = new ArrayList<>();
+            Set<String> set = new HashSet<>();
+            String[] edges = s.split(":");
+            int idx = 0;
+            for (int j=0;j<edges.length;++j) {
+                String edge = edges[j];
+                String[] ns = edge.split("->");
+                for (int i=0;i<2;++i){
+                    ns[i] = ns[i].replaceAll("]","");
+                    ns[i] = ns[i].replaceAll("\\[", "");
+                    if (!set.contains(ns[i])){
+                        set.add(ns[i]);
+                        nodes.add(new Node(ns[i], idx));
+                        idx += 1;
+                    }
+                    graph[j][i] = ns[i];
+                }
+                int idx1 = 0;
+                for (int i=0;i<nodes.size();++i){
+                    if (nodes.get(i).name.equals(ns[0])){
+                        idx1 = nodes.get(i).index;
+                        break;
+                    }
+                }
+                int idx2 = 0;
+                for (int i=0;i<nodes.size();++i){
+                    if (nodes.get(i).name.equals(ns[1])){
+                        idx2 = nodes.get(i).index;
+                        break;
+                    }
+                }
+                g[idx1][idx2] = 1;
+            }
+            return nodes;
+        } catch (InvalidGraphException e){
+            e.printStackTrace();
+            throw new InvalidGraphException("wrong vocation flow graph definition");
+        }catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("NullPointerException throws there...");
+            throw new NullPointerException("here");
+        }
+
+    }
+
 
     /**
      * return true if g contains no circle, otherwise false
@@ -186,7 +274,7 @@ public class FlowDefinition {
         return true;
     }
 
-    private static class Node {
+    public static class Node {
         public String name;
         public int index;
 

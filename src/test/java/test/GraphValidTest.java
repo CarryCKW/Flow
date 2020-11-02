@@ -14,9 +14,14 @@ public class GraphValidTest {
     private static int N = 6;
 
     public static void main(String[] args) throws IOException {
-        String filename = "vocationflow.txt";
-        String s = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]";
-        FlowDefinition.cout2File(filename, FlowDefinition.CHOICE.Vocation, s);
+//        String filename = "vocationflow.txt";
+        String s = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
+//        FlowDefinition.cout2File(filename, FlowDefinition.CHOICE.Vocation, s);
+
+        ArrayList<FlowDefinition.Node> prenodes = FlowDefinition.getPreNodes(s, "admin3");
+        prenodes.forEach(node -> {
+            System.out.println("node.name:" + node.name + "node.index:" + node.index);
+        });
     }
 
     public static String[][] checkGraphValid(String s) {
