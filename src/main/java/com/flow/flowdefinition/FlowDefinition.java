@@ -30,7 +30,7 @@ public class FlowDefinition {
 //        }
 //    }
 
-    private enum CHOICE {
+    public enum CHOICE {
         ///
         Vocation, Reception
     }
@@ -126,10 +126,14 @@ public class FlowDefinition {
 
     /**
      * get the pre admin or stu role and its index by the current admin's name
-     * @param changed  the input graph
+     * @param currentName  the input graph
      * @return list of pre {@Link FlowDefinition.Node} Node
      */
-    public static ArrayList<Node> getPreNodes(String changed, String currentName) {
+    public static ArrayList<Node> getPreNodes(String currentName) {
+        /**
+         * we should change the way of getting the string changed from file named "vocationflow.txt"
+         */
+        String changed = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
         ArrayList<Node> nodes = getNodes(changed);
         final String[][] graph = checkGraphValid(changed);
 //        Arrays.asList(graph).forEach(edge -> {
@@ -151,6 +155,26 @@ public class FlowDefinition {
         }
 
         return res;
+    }
+
+    public static Node getCurrentNode(String currentName) throws DataOpException {
+        assert currentName!=null;
+        /**
+         * we should change the way of getting the string changed from file named "vocationflow.txt"
+         */
+        String changed = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
+        ArrayList<Node> nodes = getNodes(changed);
+        Node need = new Node("", 1);
+        nodes.forEach(node -> {
+            if (node.name.equals(currentName)) {
+                need.name = node.name;
+                need.index = node.index;
+            }
+        });
+        if (!need.name.equals(currentName)) {
+            throw new DataOpException("can't find current node by currentName...");
+        }
+        return need;
     }
 
     /**
@@ -281,6 +305,14 @@ public class FlowDefinition {
         public Node(String name, int index) {
             this.name = name;
             this.index = index;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "name='" + name + '\'' +
+                    ", index=" + index +
+                    '}';
         }
     }
 }

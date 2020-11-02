@@ -30,4 +30,13 @@ public interface TableDao {
 
 
     <T extends Form> void updateTable(T form, Class<? extends Form> clazz, Object... objects) throws DataOpException;
+
+    <T extends Form> void updateTables(List<T> form, Class<? extends Form> clazz) throws DataOpException;
+
+    /**
+     * return list of objects which contains all cols from table
+     * @param clazz class of Object
+     * @return list
+     */
+    List<? extends Form> getAllTables(Class<? extends Form> clazz);
 }

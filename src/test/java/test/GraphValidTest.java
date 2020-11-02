@@ -18,10 +18,15 @@ public class GraphValidTest {
         String s = "[student]->[admin1]:[admin1]->[admin2]:[admin2]->[admin3]:[admin1]->[admin3]";
 //        FlowDefinition.cout2File(filename, FlowDefinition.CHOICE.Vocation, s);
 
-        ArrayList<FlowDefinition.Node> prenodes = FlowDefinition.getPreNodes(s, "admin3");
+        ArrayList<FlowDefinition.Node> prenodes = FlowDefinition.getPreNodes("admin1");
         prenodes.forEach(node -> {
             System.out.println("node.name:" + node.name + "node.index:" + node.index);
         });
+        System.out.println(prenodes.size());
+        System.out.println(prenodes.get(0).name);
+
+        FlowDefinition.Node node = FlowDefinition.getCurrentNode("admin1");
+        System.out.println("getcurrent node:" +node.toString());
     }
 
     public static String[][] checkGraphValid(String s) {

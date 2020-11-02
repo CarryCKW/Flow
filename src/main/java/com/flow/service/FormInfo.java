@@ -22,4 +22,12 @@ public interface FormInfo {
      * @param vocation the Object Vocation which be inserted
      */
     void insertVocation(Vocation vocation);
+
+    /**
+     * process the Vocation message by admin
+     * @param vocation the Class instance of Vocation
+     * @param adminName admin name
+     * @param agree he will agree the vocation if true, else not
+     */
+    void updateVocation(Vocation vocation, String adminName, boolean agree);
 }

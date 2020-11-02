@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -139,5 +141,40 @@ public class TableDaoJdbcImpl implements TableDao {
         }
 
 
+    }
+
+    @Override
+    public <T extends Form> void updateTables(List<T> form, Class<? extends Form> clazz) throws DataOpException {
+        Iterator<T> iterator = form.iterator();
+        while (iterator.hasNext()) {
+            try {
+                updateTable(iterator.next(), clazz);
+            }
+            catch (DataOpException de) {
+                de.printStackTrace();
+                throw de;
+            }
+        }
+    }
+
+    @Override
+    public List<? extends Form> getAllTables(Class<? extends Form> clazz) {
+        if (Form.class.equals(clazz)) {
+            String sql = "select uuid, nick, formtype, formstatus, createdate from form ";
+            List<Form> list = jdbcTemplate.query(sql, new RowMapper<Form>() {
+                @Override
+                public Form mapRow(ResultSet resultSet, int i) throws SQLException {
+                    Form form = new Form();
+                    form.setUuid(resultSet.getString("uuid"));
+                    form.setFormtype(resultSet.getInt("formtype"));
+                    form.setFormstatus(resultSet.getInt("formstatus"));
+                    form.setNick(resultSet.getString("nick"));
+                    return form;
+                }
+            });
+            return list;
+        }else {
+            throw new DataOpException("not implement {#getAllTables} with param: " + clazz);
+        }
     }
 }
