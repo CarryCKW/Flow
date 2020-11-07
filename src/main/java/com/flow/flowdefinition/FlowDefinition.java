@@ -98,8 +98,10 @@ public class FlowDefinition {
                 for (int i=0;i<N;++i){
                     if (edges[0] != null){
                         for (int j=0;j<2;++j){
-                            fileWriter.write(edges[i][j].toString());
-                            fileWriter.write("\t");
+                            if (edges[i][j]!=null) {
+                                fileWriter.write(edges[i][j].toString());
+                                fileWriter.write("\t");
+                            }
                         }
                         fileWriter.write("\n");
                         fileWriter.flush();
