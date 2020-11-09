@@ -156,6 +156,50 @@ public class TableDaoJdbcImpl implements TableDao {
             }
         }
     }
+    @Override
+    public List<? extends Form> searchallvocation()  {
+        String sql = "select nick from users where userstatus = ?";
+
+        List<String> listn = jdbcTemplate.query(sql, new Object[]{2}, new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet resultSet, int i) throws SQLException {
+                String string = resultSet .getString("nick");
+                return string;
+            }
+        });
+        List<Vocation> listv = (List<Vocation>) searchRoundForm(listn.get(0), Vocation.class, null);
+        for (int i =1 ;i< listn.size();i++)
+        {
+            List<Vocation> l = (List<Vocation>) searchRoundForm(listn.get(i), Vocation.class, null);
+            for (int j =0 ; j<l.size();j++) {
+                listv.add(l.get(j));
+            }
+        }
+        return listv;
+    }
+    @Override
+    public Vocation GetVocationByid(String uuid) {
+
+        String sql = "select * from form, vocation where form.uuid = ? and form.uuid = vocation.uuid";
+        List<Vocation> list = jdbcTemplate.query(sql, new Object[]{uuid}, new RowMapper<Vocation>() {
+            @Override
+            public Vocation mapRow(ResultSet resultSet, int i) throws SQLException {
+                Vocation vocation = new Vocation();
+                vocation.setNick(resultSet.getString("nick"));
+                vocation.setCreatedate(resultSet.getTimestamp("createdate"));
+                vocation.setFormstatus(resultSet.getInt("formstatus"));
+                vocation.setUuid(resultSet.getString("uuid"));
+                vocation.setFormtype(resultSet.getInt("formtype"));
+                vocation.setStarttime(resultSet.getTimestamp("starttime"));
+                vocation.setLasttime(resultSet.getInt("lasttime"));
+                vocation.setDescript(resultSet.getString("descript"));
+                return vocation;
+            }
+        });
+        return list.get(0) ;
+    }
+
+
 
     @Override
     public List<? extends Form> getAllTables(Class<? extends Form> clazz) {

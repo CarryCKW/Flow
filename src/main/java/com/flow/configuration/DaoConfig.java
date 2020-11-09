@@ -32,7 +32,7 @@ public class DaoConfig {
     public DataSource dataSource(){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         String name = "root";
-        String pwd = ".ckw5819wkc";
+        String pwd = "CCCccc.ckw";
         String driverClassName = "com.mysql.cj.jdbc.Driver";
         driverManagerDataSource.setDriverClassName(driverClassName);
         driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/flow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT&&allowPublicKeyRetrieval=true");

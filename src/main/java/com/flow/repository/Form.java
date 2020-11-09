@@ -56,6 +56,7 @@ public class Form {
 
     public void setFormstatus(int formstatus) {
         this.formstatus = formstatus;
+        System .out .println(this.formstatus );
     }
 
     public void setCreatedate(Timestamp createdate) {

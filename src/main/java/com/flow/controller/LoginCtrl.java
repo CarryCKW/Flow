@@ -1,5 +1,6 @@
 package com.flow.controller;
 
+import com.flow.flowdefinition.FlowDefinition;
 import com.flow.repository.User;
 import com.flow.repository.Vocation;
 import com.flow.service.FormInfo;
@@ -9,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,8 +27,12 @@ import java.util.List;
 @Controller
 public class LoginCtrl {
 
+    private String usernick;
     @Autowired
     private UserInfo userInfo;
+
+    @Autowired
+    private FlowDefinition flowDefinition;
 
     @Autowired
     private FormInfo formInfo;
@@ -77,21 +83,42 @@ public class LoginCtrl {
         System.out.println("cookies num" + cookies.length);
         for (Cookie cookie : cookies){
             if (cookie.getName().equalsIgnoreCase("nick")){
-                String usernick = cookie.getValue();
+                usernick = cookie.getValue();
                 User user = userInfo.getUserByNick(usernick);
                 System.out.println("before toIndexView, usernick:" + user.getNick() + " status: " + user.getUserstatus());
                 if(user.getUserstatus() == 2) {
                     System.out.println("stu in");
                     //加入请假消息列表
                     view = new ModelAndView("order-list-stu");
-                    //view.add(...)
+
                     List<Vocation> vocationList = (List<Vocation>) formInfo.getVocationListByNick(usernick);
+                    int count=flowDefinition .GetNodesNum() ;
+                    int pass = (int)(Math .pow(2,count)-1);
+                    System.out.println("pass = "+pass);
                     view.addObject("vocationlist", vocationList);
+                    view.addObject("pass",pass) ;
                     return view;
                 } else if (user.getUserstatus() == 1) {
                     System.out.println("admin in");
                     //加入请假消息列表
                     view = new ModelAndView("order-list-admin");
+                    usernick  = user.getNick() ;
+                    int count;
+                    int index = FlowDefinition .getCurrentNode(usernick).index ;
+                    List<Vocation> vocationlist = (List<Vocation>) formInfo.getFormsByAdminName(usernick,FlowDefinition.CHOICE.Vocation) ;
+                    count = (int) vocationlist.stream().filter(vocation1 -> vocation1.getFormstatus() == 0).count();
+                    List<FlowDefinition .Node > prenodes = FlowDefinition .getPreNodes(usernick);
+                    int result=0;
+                    for(int i=0;i<prenodes.size() ;i++)
+                    {
+                        if (prenodes .get(i).index!=0){
+                            result += Math.pow(2,prenodes.get(i).index -1);
+                        }
+                    }
+                    System.out.println("status = "+result );
+                    view.addObject("vocationlist", vocationlist);
+                    view.addObject("count", count);
+                    view.addObject("status",result) ;
                     //view.add(...)
                     return view;
                 } else if (user.getUserstatus() == 0) {
@@ -107,7 +134,21 @@ public class LoginCtrl {
         return view;
     }
 
+    @RequestMapping(value="/pass/{id}")
+    public void passvacation(HttpServletResponse response,HttpServletRequest request,@PathVariable String id) throws IOException {
+        System.out.println("in method passvocation" +usernick );
+        Vocation vocation = formInfo.Getvovationbyid(id);
+        System.out.println(vocation.toString());
+        formInfo.updateForm(vocation ,usernick ,true) ;
+        response.sendRedirect(request.getContextPath() + "/vacationinfo");
+    }
 
-
+    @RequestMapping(value="/ban/{id}")
+    public void banvacation(HttpServletResponse response,HttpServletRequest request,@PathVariable String id) throws IOException {
+        System.out.println("in method banvocation" );
+        Vocation vocation = formInfo.Getvovationbyid(id);
+        formInfo.updateVocation(vocation ,usernick ,false);
+        response.sendRedirect(request.getContextPath() + "/vacationinfo");
+    }
 
 }

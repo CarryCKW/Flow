@@ -61,14 +61,12 @@
         <!--
       <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
       <button class="layui-btn" onclick="x_admin_show('添加用户','./order-add.html')"><i class="layui-icon"></i>添加</button> -->
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+        <span class="x-right" style="line-height:40px">共有数据：${vocationlist.size()} 条</span>
     </xblock>
     <table class="layui-table">
         <thead>
         <tr>
-            <th>
-                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
+
             <th>申请人姓名</th>
             <th>表单ID</th>
             <th>申请状态</th>
@@ -80,28 +78,40 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>菜菜子</td>
-            <td>9194</td>
-            <td>待审批</td>
-            <td>2020-09-10 18:23</td>
-            <td>2020-10-01 00:00</td>
-            <td>8天</td>
-            <td>没事儿</td>
-            <td class="td-manage">
-                <!-- <a title="通过"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:;">
-                  <i class="layui-icon">&#xe6b1;</i>
-                </a>
-                <a title="不通过"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:;">
-                  <i class="layui-icon">&#xe69a;</i>
-                </a> -->
-                <button class="layui-btn" onclick=""><i class="iconfont">&#xe6b1;</i>通过</button>
-                <button class="layui-btn" onclick=""><i class="iconfont">&#xe69a;</i>不通过</button>
-            </td>
-        </tr>
+
+
+        <c:if test="${not empty vocationlist}">
+
+            <c:forEach var="vocation" items="${vocationlist}" varStatus="c">
+<%--                <c:if test="${vocation.formstatus == status }">--%>
+
+                <tr>
+
+                    <td>${vocation.nick}</td>
+
+                    <td>${vocation.uuid}</td>
+
+                    <td>待审核</td>
+
+                    <td>${vocation.createdate}</td>
+
+                    <td>${vocation.starttime}</td>
+
+                    <td>${vocation.lasttime}天</td>
+
+                    <td>${vocation.descript}</td>
+
+                    <td>
+                        <a href="${pageContext.request.contextPath}/pass/${vocation.uuid}">通过</a>
+                        <a href="${pageContext.request.contextPath}/ban/${vocation.uuid}">不通过</a>
+                    </td>
+
+                </tr>
+<%--                </c:if>--%>
+            </c:forEach>
+
+        </c:if>
+
         </tbody>
     </table>
     <div class="page">

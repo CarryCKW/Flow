@@ -68,7 +68,7 @@
         </nav>
 
 
-        <span class="x-right" style="line-height:40px">共有数据：${vocationlist.size() + 1}条</span>
+        <span class="x-right" style="line-height:40px">共有数据：${vocationlist.size() }条</span>
     </xblock>
     <table class="layui-table">
         <thead>
@@ -85,26 +85,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>stu</td>
-            <td>待通过</td>
-            <td>2020-09-10 18:23</td>
-            <td>2020-10-01 00:00</td>
-            <td>8天</td>
-            <td>nothing to do</td>
-<%--            <td class="td-manage">--%>
-<%--                <a title="查看"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:">--%>
-<%--                    <i class="layui-icon">&#xe63c;</i>--%>
-<%--                </a>--%>
-<%--            </td>--%>
-        </tr>
+
         <c:if test="${not empty vocationlist}">
             <c:forEach var="vocation" items="${vocationlist}" varStatus="c">
                 <tr>
                     <td>${vocation.nick}</td>
-                    <c:if test="${vocation.formstatus == 0}"><td>待通过</td></c:if>
-                    <c:if test="${vocation.formstatus == 1}"><td>已通过</td></c:if>
-                    <c:if test="${vocation.formstatus == 2}"><td>未通过</td></c:if>
+                    <c:if test="${vocation.formstatus >=0 and vocation.formstatus!=pass}"><td>待通过</td></c:if>
+                    <c:if test="${vocation.formstatus == pass }"><td>已通过</td></c:if>
+                    <c:if test="${vocation.formstatus == -1}"><td>未通过</td></c:if>
                     <td>${vocation.createdate}</td>
                     <td>${vocation.starttime}</td>
                     <td>${vocation.lasttime}天</td>

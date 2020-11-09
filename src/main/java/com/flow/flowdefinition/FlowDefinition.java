@@ -14,6 +14,7 @@ import java.util.Set;
 /**
  * @author 蔡小蔚
  */
+@SuppressWarnings("ALL")
 public class FlowDefinition {
     private static FileInputStream inputStream = null;
     private static FileWriter fileWriter = null;
@@ -42,18 +43,19 @@ public class FlowDefinition {
      * @return the original source graph
      * @throws IOException FileNotFoundException
      */
-    public static String getFlowDefinition(String sourcefilename, CHOICE choice) throws IOException {
+    public static String getFlowDefinition( CHOICE choice) throws IOException {
         StringBuilder result = new StringBuilder();
         BufferedReader br = null;
         if (choice.equals(CHOICE.Vocation)) {
             try{
-                String ideaPath = "src/main/resources/";
+                String ideaPath = "/src/main/resources/";
                 String basePath = "WEB-INF/classes/";
-                sourcefilename = "VocationFlowGraphDefinition.txt";
+                File file = new File(Thread.currentThread().getContextClassLoader().getResource("VocationFlowGraphDefinition.txt").getFile());
+                fileReader = new FileReader(file);
 //                String path = FlowDefinition.class.getResource(sourcefilename).getPath();
 //            System.out.println("path: " + path);
 //            fileReader = new FileReader("VocationFlowGraphDefinition.txt");
-                fileReader = new FileReader(ideaPath + sourcefilename);
+               // fileReader = new FileReader(ideaPath + sourcefilename);
                 br = new BufferedReader(fileReader);
                 String s = null;
                 while ((s = br.readLine())!=null) {
@@ -72,7 +74,6 @@ public class FlowDefinition {
             throw new DataOpException("not implement");
         }
     }
-
     /**
      * this func to check input changed's valid, if valid then output to the target file and change the source
      * flowDefinition file, otherwise throw exception
@@ -82,24 +83,26 @@ public class FlowDefinition {
      * @throws IOException exception
      * @throws InvalidGraphException exception
      */
-    public static void cout2File(String targetfilename, CHOICE choice, String changed) throws IOException, InvalidGraphException {
+    public static void cout2File( CHOICE choice, String changed) throws IOException, InvalidGraphException {
         if (choice.equals(CHOICE.Vocation)) {
             try {
-                targetfilename = "vocationflow.txt";
-                fileWriter = new FileWriter(targetfilename);
+                File file1 = new File(Thread.currentThread().getContextClassLoader().getResource("vocationflow.txt").getFile());
+                File file2 = new File(Thread.currentThread().getContextClassLoader().getResource("VocationFlowGraphDefinition.txt").getFile());
+                fileWriter = new FileWriter(file1);
                 String[][] edges = new String[N][2];
                 edges = checkGraphValid(changed);
-
-                FileWriter fileWriter2 = new FileWriter("VocationFlowGraphDefinition.txt");
+                FileWriter fileWriter2 = new FileWriter(file2);
                 fileWriter2.write(changed);
                 fileWriter2.flush();
                 fileWriter2.close();
 
                 for (int i=0;i<N;++i){
                     if (edges[0] != null){
-                        for (int j=0;j<2;++j){
-                            fileWriter.write(edges[i][j].toString());
-                            fileWriter.write("\t");
+                        for (int j=0;j<2;++j) {
+                            if (edges[i][j] != null) {
+                                fileWriter.write(edges[i][j].toString());
+                                fileWriter.write("\t");
+                            }
                         }
                         fileWriter.write("\n");
                         fileWriter.flush();
@@ -129,7 +132,7 @@ public class FlowDefinition {
      * @param currentName  the input graph
      * @return list of pre {@Link FlowDefinition.Node} Node
      */
-    public static ArrayList<Node> getPreNodes(String currentName) {
+    public static ArrayList<Node> getPreNodes(String currentName) throws InvalidGraphException {
         /**
          * we should change the way of getting the string changed from file named "vocationflow.txt"
          */
@@ -188,6 +191,7 @@ public class FlowDefinition {
      */
     private static String[][] checkGraphValid(String s) throws InvalidGraphException {
         try {
+            int vexnum=0;
             String[][] graph = new String[N][2];
             int[][] g = new int[N][N];
             boolean isvalid = false;
@@ -211,6 +215,7 @@ public class FlowDefinition {
                 int idx1 = 0;
                 for (int i=0;i<nodes.size();++i){
                     if (nodes.get(i).name.equals(ns[0])){
+                        System.out.println("asdf:" + nodes.get(i).name);
                         idx1 = nodes.get(i).index;
                         break;
                     }
@@ -218,6 +223,7 @@ public class FlowDefinition {
                 int idx2 = 0;
                 for (int i=0;i<nodes.size();++i){
                     if (nodes.get(i).name.equals(ns[1])){
+                        System.out.println("asdf:" + nodes.get(i).name);
                         idx2 = nodes.get(i).index;
                         break;
                     }
@@ -290,15 +296,64 @@ public class FlowDefinition {
         }
 
     }
-
+    public  int GetNodesNum() throws IOException {
+        ArrayList<Node> list = getNodes(getFlowDefinition(CHOICE.Vocation ) ) ;
+        int num=list.size() -1;
+        return num;
+    }
+    /*public int GetCurrentStatus(String admin)
+    {
+        ArrayList<Node> nodeList = getPreNodes(admin) ;
+        int result=0;
+        for(int i=0;i<nodeList .size() -1;i++)
+        {
+            if (nodeList .get(i).index!=0){
+            result += Math.pow(2,nodeList .get(i).index -1);
+            }
+        }
+        return result ;
+    }*/
 
     /**
      * return true if g contains no circle, otherwise false
      * @param g 2D graph
      * @return true or false
      */
+    private static boolean v(int [][]g,boolean visited[],int a)
+    {
+        boolean x=true;
+        for(int i=0;i<N;i++)
+        {
+            if(g[a][i]==1)
+            {
+                if(visited[i]==true)
+                    return false;
+                else
+                {
+                    visited[a]=true;
+                    visited[i]=true;
+                    x= v(g,visited,i);
+                    visited[a]=false;
+                    visited[i]=false;
+                }
+            }
+        }
+        return x;
+    }
     private static boolean isValid(int[][] g){
-        return true;
+        boolean valid=true;
+        boolean[] visited=new boolean[N];
+        for(int i=0;i<N;i++)
+            visited [i]=false;
+        for(int i=0;i<N;i++)
+        {
+            if(!v(g,visited,i))
+            {
+                valid =false;
+                break;
+            }
+        }
+        return valid ;
     }
 
     public static class Node {

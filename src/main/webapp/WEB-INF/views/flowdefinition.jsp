@@ -50,16 +50,17 @@
         <h2 class="layui-colla-title">重新定义请假流程</h2>
         <div class="layui-colla-content layui-show">
             <div class=" layui-form layui-form-item layui-form-text">
+                <form action="${pageContext.request.contextPath}/flowdefine/changeflow" method="post" >
                 <div class="layui-input-block">
-                    <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
+                     <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
                 </div>
-                <div class="layui-form layui-form-item">
-                    <label for="L_repass" class="layui-form-label">
+                    <%--@declare id="l_repass"--%><label for="L_repass" class="layui-form-label">
                     </label>
-                    <button  class="layui-btn" lay-filter="add" lay-submit="">
-                        确认修改
-                    </button>
-                </div>
+
+                    <input type="submit"   class="layui-btn" >
+                    </input>
+                        </form>
+
             </div>
         </div>
     </div>
@@ -68,6 +69,10 @@
 </div>
 
 <script>
+    function ChangeDef(){
+        var text = $('#desc').val();
+        ${flowdefinition}
+    }
     //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
     layui.use('element', function(){
         var element = layui.element;
@@ -77,6 +82,7 @@
 </script>
 
 <script>
+
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 

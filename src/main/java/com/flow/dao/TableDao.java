@@ -2,6 +2,7 @@ package com.flow.dao;
 
 import com.flow.exdException.DataOpException;
 import com.flow.repository.Form;
+import com.flow.repository.Vocation;
 
 import java.util.List;
 
@@ -39,4 +40,8 @@ public interface TableDao {
      * @return list
      */
     List<? extends Form> getAllTables(Class<? extends Form> clazz);
+
+
+    Vocation  GetVocationByid(String uuid);
+    List<? extends Form>searchallvocation()  ;
 }

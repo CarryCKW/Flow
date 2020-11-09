@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class ResourcesTest {
     public static void main(String[] args) throws IOException {
-        System.out.println(FlowDefinition.getFlowDefinition(null, FlowDefinition.CHOICE.Vocation));
+        System.out.println(FlowDefinition.getFlowDefinition(FlowDefinition.CHOICE.Vocation));
 
     }
 }

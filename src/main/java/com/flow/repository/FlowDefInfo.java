@@ -18,7 +18,7 @@ public class FlowDefInfo {
     }
 
     public FlowDefInfo() throws IOException {
-        String beforedef = FlowDefinition.getFlowDefinition(null, FlowDefinition.CHOICE.Vocation);
+        String beforedef = FlowDefinition.getFlowDefinition(FlowDefinition.CHOICE.Vocation);
         this.setBeforeChangeDescript(beforedef);
     }
 
