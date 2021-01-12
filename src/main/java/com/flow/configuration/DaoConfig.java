@@ -31,11 +31,11 @@ public class DaoConfig {
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        String name = "root";
-        String pwd = "CCCccc.ckw";
+        String name = "****";
+        String pwd = "****";
         String driverClassName = "com.mysql.cj.jdbc.Driver";
         driverManagerDataSource.setDriverClassName(driverClassName);
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/flow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT&&allowPublicKeyRetrieval=true");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/****?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT&&allowPublicKeyRetrieval=true");
         driverManagerDataSource.setUsername(name);
         driverManagerDataSource.setPassword(pwd);
         return driverManagerDataSource;
